@@ -1,5 +1,5 @@
 ---
-- name: setup config ip for interface + Save backup
+- name: setup show run command + Save backup
   hosts: routers
   connection: network_cli
   gather_facts: no
