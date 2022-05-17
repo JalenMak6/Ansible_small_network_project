@@ -1,0 +1,24 @@
+---
+
+- name: show run
+  hosts: routers
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: configure provider
+      set_fact:
+        provider:
+          username: jalen
+          password: password
+          auth_pass: cisco
+          
+    - name: show run
+      ios_command:
+        commands:
+          - show run
+      register: output
+
+    - name: print output
+      debug:
+        var: output.stdout_lines

@@ -1,0 +1,31 @@
+---
+- name: setup config ip for interface + Save backup
+  hosts: routers
+  connection: network_cli
+  gather_facts: no
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+
+  tasks:
+    - name: configure provider
+      set_fact:
+        provider:
+          username: jalen
+          password: password
+          auth_pass: cisco
+
+    - name: run show run command
+      ios_command:
+        commands:
+          - show run
+      register: output
+
+    - name: print output
+      debug:
+        var: output.stdout_lines
+
+    - name: backup to tftp server
+      copy:
+        content: "{{ output.stdout[0] }}"
+        dest: "/srv/tftp/ansible-confg_{{  lookup('pipe', 'date +%Y%m%d-%H%M')  }}"
+
